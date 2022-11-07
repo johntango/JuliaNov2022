@@ -179,28 +179,12 @@ end
 begin
     # select top 5 columns with highest correlation with SalePrice
 
-    function getTopCorrelatedColumns(df, num)
-        corMatrix = cor(Matrix(df))
-        # get column names
-        colNames = names(df)
-        # get correlation values
-        corValues = corMatrix[:, size(df)[2]]
-        # sort correlation values
-        sortedCorValues = sort(corValues, rev=true)
-        # get top 5 values
-        topCorValues = sortedCorValues[1:num]
-        # get column names of top 5 values
-        topCorColumns = []
-        for i in 1:num
-            for j in 1:size(df)[2]
-                if corValues[j] == topCorValues[i]
-                    push!(topCorColumns, colNames[j])
-                end
-            end
-        end
-        return topCorColumns
-    end
-    topCorColumns = getTopCorrelatedColumns(train, 5)
+    # select highest correlation with column 36
+    priceCor = corMatrix[:, 36]
+    # get index of the top 5 correlations
+    top5 = sortperm(priceCor, rev=true)[1:5]
+    # get column names of top 5 correlations
+    top5Names = names(train)[top5]
 
 end
 
@@ -212,19 +196,18 @@ begin
     # select columns from list of column names
     function selectColumns(df, colNames)
         X = []
-        for i in 1:length(colNames)
+        for i in eachindex(colNames)
             if i == 1
-                X = df[:, Symbol(colNames[i])]
+                X = df[:, Symbol(colNames[eachindex])]
             else
-                X = hcat(X, df[:, Symbol(colNames[i])])
+                X = hcat(X, df[:, Symbol(colNames[eachindex])])
             end
         end
         return X
     end
 
-
-    Y = selectColumns(train, topCorColumns[1:1])
-    X = selectColumns(train, topCorColumns[2:4])
+    Y = selectColumns(train, top5Names[1:1])
+    X = selectColumns(train, top5Names[2:4])
 end
 
 # ╔═╡ 27c9cac8-0f2e-466c-b97f-baa1cc7df5a1
