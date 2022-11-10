@@ -50,7 +50,7 @@ myRef2 = df0.colour
 begin
 	dict0 = Dict(:Color=>["green","blue","white","green","green"],:Shape=>["circle", "triangle", "square","square","circle"],:Border=>["dotted", "line", "line", "line", "dotted"],:Area=>[1.1, 2.3, 3.1, missing, 5.2])
 	df01 = DataFrame(dict0)
-	#select(df, Not(:Area))   # drop column :Area
+	#select(df01, Not(:Area))   # drop column :Area
 end
 
 # ╔═╡ 12a7b0dc-c29c-42f5-bec9-7ba05732baf0
